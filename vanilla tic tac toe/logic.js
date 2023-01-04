@@ -1,5 +1,9 @@
-let currentPlayer = "X";
+
 const cells=document.getElementsByClassName("cell");
+
+const PLAYER_X_CLASS = 'X'
+const PLAYER_O_CLASS = 'O'
+let currentPlayer = PLAYER_X_CLASS;
 
 const board = [
   ["", "", ""],
@@ -13,6 +17,9 @@ window.onload=function(){
   }
 }
 
+
+
+
 function handleClick(event) {
   const cell = event.target;
   if (cell.innerHTML === "") {
@@ -23,7 +30,8 @@ function handleClick(event) {
 
 function drawCharacter(cell) 
 {
-  cell.innerHTML=currentPlayer
+  cell.classList.add(currentPlayer)
+  // cell.innerHTML=currentPlayer
 }
 
 
@@ -39,7 +47,7 @@ function updateBoard(cell) {
   }
   else
   {
-    currentPlayer = (currentPlayer === "X") ? "O" : "X";
+    currentPlayer = (currentPlayer === PLAYER_X_CLASS) ? PLAYER_O_CLASS : PLAYER_X_CLASS;
   }
 
 }
@@ -60,10 +68,10 @@ function updateBoard(cell) {
     }
     // Check diagonals
     if (board[0][0] === player && board[1][1] === player&& board[2][2] === player) {
-      return board[0][0];
+      return true;
     }
     if (board[2][0] === player && board[1][1] === player && board[2][0] === player) {
-      return board[2][0];
+      return true;
     }
     return false
   }
@@ -91,7 +99,8 @@ function updateBoard(cell) {
   function resetGUIBoar(){
     
     for (const cell of cells) {
-      cell.innerHTML = "";
+      cell.classList.remove(PLAYER_X_CLASS)
+      cell.classList.remove(PLAYER_O_CLASS)
     }
 
   }

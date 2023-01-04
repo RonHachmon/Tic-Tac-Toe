@@ -1,0 +1,73 @@
+:root {
+	--cell-size: 100px;
+
+	--color: #fb3f1a; /* for X */
+	--color-set: #0275d8; /* for O */
+	--l: 10px; /* X line-width */
+}
+
+body {
+	margin: 0;
+}
+
+.board {
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	justify-content: center;
+	align-content: center;
+	justify-items: center;
+	align-items: center;
+	grid-template-columns: repeat(3, auto)
+}
+
+.cell {
+	width: var(--cell-size);
+	height: var(--cell-size);
+	border: 1px solid black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+}
+
+/* remove border for edges */
+.cell:nth-child(1), .cell:nth-child(2), .cell:nth-child(3) {
+	border-top: none;
+}
+
+.cell:nth-child(1), .cell:nth-child(4), .cell:nth-child(7) {
+	border-left: none;
+}
+
+.cell:nth-child(3), .cell:nth-child(6), .cell:nth-child(9) {
+	border-right: none;
+}
+
+.cell:nth-child(7), .cell:nth-child(8), .cell:nth-child(9) {
+	border-bottom: none;
+}
+
+/* for cross */
+.cell:not(.O).X{
+	background: linear-gradient(to top right, transparent calc(50% - var(--l) / 2), var(--color) calc(50% - var(--l) / 2) calc(50% + var(--l) / 2), transparent calc(50% + var(--l) / 2)),
+				linear-gradient(to bottom right, transparent calc(50% - var(--l) / 2), var(--color) calc(50% - var(--l) / 2) calc(50% + var(--l) / 2), transparent calc(50% + var(--l) / 2));
+	background-size: 80% 80%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+/* for circle */
+.board.O .cell:not(.O):not(.X):hover {	
+	background: radial-gradient(var(--color) 60%, transparent 60%);
+}
+
+/* for circle (set) */
+.cell:not(.X).O {
+	background: radial-gradient(var(--color-set) 60%, transparent 60%);
+}
+
+.cell.X, .cell.O {
+	cursor: not-allowed;
+}
