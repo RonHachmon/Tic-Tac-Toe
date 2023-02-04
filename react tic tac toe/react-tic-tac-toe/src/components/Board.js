@@ -1,12 +1,13 @@
 import Square from "./Square";
 import TicTacToeLogic from "./TicTacToeLogic";
-import { useState } from "react";
+import { useState,useContext } from "react";
+import {scoreboard} from './Scoreboard';
+
 function Board () {
     const [squares, setSquares] = useState(Array(9).fill(null))
     const [isX, setIsX] = useState(true);
-    const [oWinCount, setoWinCount] = useState(0);
-    const [xWinCount, setxWinCount] = useState(0);
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("player X turn");
+    const { oWinCount, setoWinCount, xWinCount, setxWinCount,cleanScore,addToGameHistory } = useContext(scoreboard);
 
   
     const handleClick = (i) => {
@@ -16,7 +17,19 @@ function Board () {
 
       squares[i] = isX ? 'X' : 'O'
       setSquares(squares)
+      switchPlyer()
       checkWinner()
+    }
+    const switchPlyer = ()=>{
+      if(isX)
+      {
+        setStatus("player O turn")
+
+      }
+      else
+      {
+        setStatus("player X turn")
+      }
       setIsX(!isX)
     }
 
@@ -24,18 +37,20 @@ function Board () {
     const checkWinner = ()=>{
       const winner = TicTacToeLogic(squares)      
       if (winner) {
+        let date=new Date
+        let stringDate=date.toISOString()
         setStatus(`Winner: ${winner}`)
         if (winner=="X")
         {
-          setxWinCount(xWinCount+1)
+          
+          setxWinCount(parseInt(xWinCount)+1)
         }
         else
         {
-          setoWinCount(oWinCount+1)
+          setoWinCount(parseInt(oWinCount)+1)
         }
-      } else {
-        setStatus('Next player: ' + (isX ? 'X' : 'O'))
-      }
+        addToGameHistory({stringDate,winner})
+      } 
     }
   
 
@@ -73,6 +88,7 @@ function Board () {
         </div>
         <div className="status">{status}</div>
         <button className="restart" onClick={handleRestart}>Restart Game!</button>
+        <button className="restart" onClick={cleanScore}>reset score</button>
       </div>
     )
   }
