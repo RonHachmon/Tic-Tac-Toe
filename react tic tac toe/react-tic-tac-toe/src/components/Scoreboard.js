@@ -1,15 +1,30 @@
 import React, { useState,useEffect } from 'react';
 
+
 // First, we need to create a context
-export const scoreboard = React.createContext();
+export const ScoreboardContext = React.createContext();
 
 const ScoreboardProvider=(props)=> {
     const [oWinCount, setoWinCount] = useState(0);
     const [xWinCount, setxWinCount] = useState(0);
     const [gameHistoryArray, setGameHistoryArray] = useState([]);
 
-    const addToGameHistory=(game)=>
+    const addToGameHistory= async(game)=>
     {
+      try{
+        const response = await fetch("http://localhost:4000/score", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(game)
+        });
+    }
+    catch(error)
+    {
+      console.error(error);
+    }
+
       setGameHistoryArray([...gameHistoryArray,game])
       console.log(gameHistoryArray)
     }
@@ -24,7 +39,14 @@ const ScoreboardProvider=(props)=> {
       }
     }, [xWinCount,oWinCount]);
 
+
+    // on load get history from server
     useEffect(() => {
+      async function fetchData()
+      {
+        await loadWinnersArray()
+      }
+      fetchData()
       if (localStorage.getItem("X-wins")!=null)
       {
         console.log(localStorage.getItem("X-wins"))
@@ -37,17 +59,25 @@ const ScoreboardProvider=(props)=> {
       }
     }, []);
 
-    const cleanScore = ()=>
+    const loadWinnersArray = async ()=>
     {
-      setoWinCount(0)
-      setxWinCount(0)
+      const response = await fetch('http://localhost:4000/score');
+      const data = await response.text();
+      console.log(data);
+
+    }
+
+     const cleanScore = async ()=>
+    {
+        setoWinCount(0)
+        setxWinCount(0)
     }
 
   
     return (
-      <scoreboard.Provider value={{oWinCount,setoWinCount,xWinCount,setxWinCount,cleanScore,addToGameHistory}}>
+      <ScoreboardContext.Provider value={{oWinCount,setoWinCount,xWinCount,setxWinCount,cleanScore,addToGameHistory}}>
         {props.children}
-      </scoreboard.Provider>
+      </ScoreboardContext.Provider>
     );
   }
   export default ScoreboardProvider;
