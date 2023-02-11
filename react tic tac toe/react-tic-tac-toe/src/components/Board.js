@@ -1,13 +1,13 @@
 import Square from "./Square";
 import TicTacToeLogic from "./TicTacToeLogic";
 import { useState,useContext } from "react";
-import {scoreboard} from './Scoreboard';
+import {ScoreboardContext} from './Scoreboard';
 
 function Board () {
     const [squares, setSquares] = useState(Array(9).fill(null))
     const [isX, setIsX] = useState(true);
     const [status, setStatus] = useState("player X turn");
-    const { oWinCount, setoWinCount, xWinCount, setxWinCount,cleanScore,addToGameHistory } = useContext(scoreboard);
+    const { oWinCount, setoWinCount, xWinCount, setxWinCount,cleanScore,addToGameHistory } = useContext(ScoreboardContext);
 
   
     const handleClick = (i) => {
@@ -37,10 +37,10 @@ function Board () {
     const checkWinner = ()=>{
       const winner = TicTacToeLogic(squares)      
       if (winner) {
-        let date=new Date
+        let date=new Date()
         let stringDate=date.toISOString()
         setStatus(`Winner: ${winner}`)
-        if (winner=="X")
+        if (winner==="X")
         {
           
           setxWinCount(parseInt(xWinCount)+1)
