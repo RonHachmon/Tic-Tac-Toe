@@ -11,6 +11,15 @@ const ScoreboardProvider=(props)=> {
 
     const addToGameHistory= async(game)=>
     {
+      await sendGameToServer(game)
+
+      setGameHistoryArray([...gameHistoryArray,game])
+      console.log(gameHistoryArray)
+    }
+
+    
+    const sendGameToServer= async (game)=>
+    {
       try{
         const response = await fetch("http://localhost:4000/score", {
           method: 'POST',
@@ -19,14 +28,12 @@ const ScoreboardProvider=(props)=> {
           },
           body: JSON.stringify(game)
         });
-    }
-    catch(error)
-    {
+      }
+      catch(error)
+      {
       console.error(error);
-    }
+      }
 
-      setGameHistoryArray([...gameHistoryArray,game])
-      console.log(gameHistoryArray)
     }
 
 
