@@ -1,6 +1,7 @@
 const express = require('express');
 const scoreboardRouter = require('./routers/scoreboard_api')
 const app = express();
+const PORT = 4000
 
 
 app.use(express.json()); 
@@ -35,7 +36,6 @@ app.use('/score',scoreboardRouter)
 
 
 app.listen(4000, () => {
-  console.log('Server listening on port 4000');
-
+  console.log(`Server listening on port ${PORT}`);
 });
 
